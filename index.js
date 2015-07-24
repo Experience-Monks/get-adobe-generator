@@ -1,13 +1,9 @@
 var child_process = require('child_process');
-var EventEmitter = require('events').EventEmitter;
-var stream = require('stream');
-var createChildProcessMethod = require('./lib/createChildProcessMethod');
+var getMockGenerator = require('./lib/getMockGenerator');
 
 var ERR_CANNOT_CONNECT = 'ECONNREFUSED';
 
 module.exports = function(onInit) {
-
-  var control = {};
 
   // invoke generator-core which will look for plugins in this current director and find
   // this module which is the helper
@@ -17,7 +13,7 @@ module.exports = function(onInit) {
   });
 
   // pipe output to screen
-  // cp.stdout.pipe(process.stdout);
+  cp.stdout.pipe(process.stdout);
 
   // watch for cannot connect if there is an error send error to onInit
   cp.stdout.on('data', onPhotoshopNotUp);
@@ -44,12 +40,7 @@ module.exports = function(onInit) {
     // remove this since clearly it was up
     cp.stdout.removeListener('data', onPhotoshopNotUp);
 
-    // create methods which will communicate with the generator
-    methods.forEach( function(methodName) {
-      control[ methodName ] = createChildProcessMethod(cp, methodName);
-    });
-
-    onInit(null, control);
+    onInit(null, getMockGenerator(cp, methods));
   }
 };
 
