@@ -1,0 +1,31 @@
+{
+  "name": "get-adobe-generator",
+  "version": "1.0.0",
+  "description": "A helper module which allows you to receive a Photoshop Generator instance",
+  "main": "index.js",
+  "license": "MIT",
+  "author": {
+    "name": "Mikko Haapoja",
+    "email": "me@mikkoh.com",
+    "url": "https://github.com/jam3"
+  },
+  "dependencies": {
+    "generator-core": "^3.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "photoshop,generator,helper,utility,wrapper"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jam3/get-adobe-generator.git"
+  },
+  "homepage": "https://github.com/jam3/get-adobe-generator",
+  "bugs": {
+    "url": "https://github.com/jam3/get-adobe-generator/issues"
+  },
+  "generator-core-version" : ">=3.0.0"
+}
