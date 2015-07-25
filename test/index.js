@@ -1,5 +1,4 @@
 var getAdobeGenerator = require('./..');
-var fs = require('fs');
 
 getAdobeGenerator(function(err, generator) {
 
@@ -10,33 +9,31 @@ getAdobeGenerator(function(err, generator) {
 
   generator.getOpenDocumentIDs(function(err, ids) {
 
-    console.log('console log there are ', idx.length, 'open files in photoshop');
+    console.log('there are ', ids.length, 'open files in photoshop');
 
     generator.getDocumentInfo(ids[ 0 ], function(err, info) {
 
-      console.log('got info. There are', info.layers.length, 'layers');
+      console.log('there are', info.layers.length, 'layers');
 
-      generator.getPixmap(info.id,info.layers[0].id,{}, function(err, pixmap) {
+      generator.getPixmap(info.id, info.layers[0].id, {}, function(err, pixmap) {
 
-        console.log('got the pixelmap');
-        // fs.writeFileSync('layerOutput.json', JSON.stringify(pixmap, null, '  '), 'utf-8');
+        console.log('got the pixmap');
       });
     });
   });
 
-  // this is another event which hasn't been implemented yes
-  // generatorMenuChanged
+  // generatorMenuChanged is another event we could listen to
   
-  generator.on('toolChanged', function() {
-    console.log('toolChanged', arguments);
+  generator.on('toolChanged', function(tool) {
+    console.log('toolChanged', tool);
   });
 
-  generator.on('currentDocumentChanged', function() {
-    console.log('currentDocumentChanged', arguments);
+  generator.on('currentDocumentChanged', function(info) {
+    console.log('currentDocumentChanged', info);
   });
 
-  generator.on('imageChanged', function() {
-    console.log('imageChanged', arguments);
+  generator.on('imageChanged', function(info) {
+    console.log('imageChanged', info);
   });
 
   generator.on('close', function() { 
