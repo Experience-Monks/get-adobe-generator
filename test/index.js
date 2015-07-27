@@ -1,42 +1,35 @@
 var getAdobeGenerator = require('./..');
 
-getAdobeGenerator(function(err, generator) {
+var generator = getAdobeGenerator();
 
-  if(err) {
-    console.log('error', err);
-    return;
-  }
+generator.getOpenDocumentIDs()
+.then(function(ids) {
 
-  generator.getOpenDocumentIDs(function(err, ids) {
+  return generator.getDocumentInfo(ids[ 0 ]);
+})
+.then(function(info) {
 
-    console.log('there are ', ids.length, 'open files in photoshop');
+  console.log('there are', info.layers.length, 'layers');
 
-    generator.getDocumentInfo(ids[ 0 ], function(err, info) {
+  return generator.getPixmap(info.id, info.layers[0].id, {});
+})
+.then(function(pixmap) {
 
-      console.log('there are', info.layers.length, 'layers');
+  console.log('got the pixmap');
+});
 
-      generator.getPixmap(info.id, info.layers[0].id, {}, function(err, pixmap) {
+generator.onPhotoshopEvent('toolChanged', function(tool) {
+  console.log('toolChanged', tool);
+});
 
-        console.log('got the pixmap');
-      });
-    });
-  });
+generator.onPhotoshopEvent('currentDocumentChanged', function(info) {
+  console.log('currentDocumentChanged', info);
+});
 
-  // generatorMenuChanged is another event we could listen to
-  
-  generator.on('toolChanged', function(tool) {
-    console.log('toolChanged', tool);
-  });
+generator.onPhotoshopEvent('imageChanged', function(info) {
+  console.log('imageChanged', info);
+});
 
-  generator.on('currentDocumentChanged', function(info) {
-    console.log('currentDocumentChanged', info);
-  });
-
-  generator.on('imageChanged', function(info) {
-    console.log('imageChanged', info);
-  });
-
-  generator.on('close', function() { 
-    console.log('photoshop closed');
-  });
+generator.onPhotoshopEvent('close', function() { 
+  console.log('photoshop closed');
 });
